@@ -15,26 +15,31 @@ class PreguntasSeeder extends Seeder
     {
         $pregunta = new Pregunta();
         $pregunta->pregunta = "Tiene algo que ver con esto";
+        $pregunta->opciones = 1;
         $pregunta->id_texto = 1;
         $pregunta->save();
 
         $pregunta = new Pregunta();
         $pregunta->pregunta = "No Tiene algo que ver con esto";
+        $pregunta->opciones = 1;
         $pregunta->id_texto = 1;
         $pregunta->save();
 
         $pregunta = new Pregunta();
         $pregunta->pregunta = "Tienes telefono movil";
+        $pregunta->opciones = 1;
         $pregunta->id_texto = 2;
         $pregunta->save();
 
         $pregunta = new Pregunta();
         $pregunta->pregunta = "Tienes covid-19";
+        $pregunta->opciones = 1;
         $pregunta->id_texto = 2;
         $pregunta->save();
 
         $pregunta = new Pregunta();
         $pregunta->pregunta = "Tienes hambre";
+        $pregunta->opciones = 1;
         $pregunta->id_texto = 3;
         $pregunta->save();
 

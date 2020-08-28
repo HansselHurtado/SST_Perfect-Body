@@ -5,9 +5,6 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
 
 Route::get('/','IndexController@index')->name('home2');
 
@@ -31,5 +28,8 @@ Route::get('/administracion','IndexController@index_administracion')->name('admi
 Route::post('/administracion/crear-texto','IndexController@crear_texto')->name('crear_texto');
 Route::post('/administracion/editar-texto','IndexController@editar_texto')->name('editar_texto');
 Route::delete('/administracion/eliminar-texto/{id_texto}','IndexController@eliminar_texto');
+//Route::get('/administracion/eliminar-pregunta/{id_pregunta}','IndexController@eliminar_pregunta')->name('eliminar_pregunta');
+Route::post('/administracion/anadir-respuesta','IndexController@anadir_respuesta')->name('anadir_respuesta');
+Route::post('/administracion/eliminar-pregunta/{id_pregunta}','IndexController@eliminar_pregunta');
 
 

@@ -15,51 +15,61 @@ class RespuestasSeeder extends Seeder
     {
         $respuesta = new Respuesta();
         $respuesta->respuesta = "No";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 1;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "Sí";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 1;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "No";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 2;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "Sí";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 2;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "No";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 3;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "Sí";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 3;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "No";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 4;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "Sí";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 4;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "No";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 5;
         $respuesta->save();
 
         $respuesta = new Respuesta();
         $respuesta->respuesta = "Sí";
+        $respuesta->opciones = 1;
         $respuesta->id_pregunta = 5;
         $respuesta->save();
 

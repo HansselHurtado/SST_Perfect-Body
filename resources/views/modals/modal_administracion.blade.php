@@ -105,7 +105,7 @@
                                     <p id="texto" class="lead"> </p>
                                 </div>
                                 <!-- Prguntas-->
-                                <section class="col-md-8 col-12 ">
+                                <section class="d-flex flex-column">
                                     <div id="preguntas"  class="row">                                       
                                     </div>
                                     <div id="anadir_pregunta" class="row">
@@ -116,7 +116,7 @@
                                     <button type="submit" class="btn btn-primary mx-3">                                
                                         Editar 
                                     </button>
-                                    <a onclick="anadir_pregunta()" class="btn btn-primary">                                
+                                    <a  onclick="anadir_pregunta()" class="btn btn-primary">                                
                                         Añadir preguntas 
                                     </a>                                    
                                 </div>                                                   
@@ -136,8 +136,8 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Seguro que deseas eliminar?</h5>
           </div>
-          <div class="modal-body">Si eliminas  el texto con titulo <strong id="titulo_modal_eliminar"></strong>, se eliminará todo lo que este asociado a el. <br>
-            Seleciona "Eliminar" para continuar
+          <div class="modal-body">Si eliminas  el texto con titulo <strong id="titulo_modal_eliminar"></strong>, se eliminará todo lo que esté asociado a el. <br>
+            Selecciona "Eliminar" para continuar
             o "Cancelar" para abortar.
           </div>
             <div class="modal-footer">
@@ -159,3 +159,58 @@
           </div>
       </div>
     </div>
+
+
+    <!-- Modal crear respuestas -->
+<div class="portfolio-modal modal fade" id="Modal_crear_respuesta" tabindex="-1" role="dialog" aria-labelledby="portfolioModal2Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+            </button>
+            <div class="modal-body text-center">
+                <section class="page-section" id="contact">
+                    <div class="container">
+                        <!-- Contact Section Heading-->
+                        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Crear opciones respuestas</h2>
+                        <!-- Icon Divider-->
+                        <div class="divider-custom">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        <!-- Contact Section Form-->
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <form method="POST" action="{{route('anadir_respuesta')}}">
+                                    @csrf
+                                    <div class="control-group">
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <select style="border-radius: 10px; height: 50px; font-size: 20px;" id="pregunta_seleccionada" class="browser-default custom-select mb-4" name="pregunta"  required>
+                                                <option value="" selected disabled>Seleccione su pregunta</option>                                                                   
+                                                @foreach ($preguntas as $pregunta)
+                                                    <option value="{{$pregunta->id_pregunta}}" >{{$pregunta->pregunta}}</option> 
+                                                @endforeach                                                                                         
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="respuestas">
+                                    </div>                                    
+                                    <br>                              
+                                    <div class="form-group row justify-content-between">
+                                        <button class="btn btn-primary btn-lg" type="submit" id="boton_guardar_respuesta" disabled>Guardar</button>
+                                        <a class="btn btn-primary btn-lg" onclick="anadir_respuesta();" >Añadir Respuesta</a>    
+                                </form>                                
+                                        <form id="form_preguntas" method="POST" action="">
+                                            @csrf        	
+                                            <button class="btn btn-danger btn-lg" type="submit" id="eliminar_pregunta" onclick="eliminar_preguntaa();" disabled>Eliminar pregunta</button>
+                                        </form> 
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

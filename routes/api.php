@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/home1/texto/{id_texto}','IndexController@textos'); 
+Route::get('/home1/texto-editar/{id_texto}','IndexController@editar_textos'); 

@@ -25,8 +25,10 @@ class CreateRegistrosTable extends Migration
             $table->unsignedInteger('id_pregunta');
             $table->foreign('id_pregunta')->references('id_pregunta')->on('preguntas')->onDelete('cascade');
 
-            $table->unsignedInteger('id_respuesta');
-            $table->foreign('id_respuesta')->references('id_respuesta')->on('respuestas')->onDelete('cascade');
+            $table->string('respuesta');
+
+            //$table->unsignedInteger('id_respuesta');
+            //$table->foreign('id_respuesta')->references('id_respuesta')->on('respuestas')->onDelete('cascade');
 
             $table->string('fecha');
             $table->timestamps();

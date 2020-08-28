@@ -19,10 +19,10 @@ class Registro extends Model
         return $this->belongsTo('App\Pregunta');
     }
 
-    public function respuesta()//relacion inversa de uno a mucho
+    /*public function respuesta()//relacion inversa de uno a mucho
     {
         return $this->belongsTo('App\Respuesta');
-    }
+    }*/
 
     public function texto()//relacion inversa de uno a mucho
     {

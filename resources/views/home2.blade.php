@@ -20,7 +20,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top">Sistema de Gestion de Calidad </a>
+                <a class="navbar-brand js-scroll-trigger" href="#page-top">Gestion de Calidad </a>
                 <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
@@ -29,6 +29,14 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Preguntas</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" data-toggle="modal" data-target="#Modal_registrar_personal">Registrate</a></li>
+                        <div class="dropdown">
+                            <a class="mx-0 mx-lg-1 nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger dropdown-toggle" href="#" id="dropdownAdministrar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Recursos</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownAdministrar">
+                                <a class="dropdown-item js-scroll-trigger"  href="#gestion">Qué es gestion de calidad?</a>
+                                <a class="dropdown-item js-scroll-trigger"  href="#quejas">enviar quejas y sugerencia</a>
+                                <a class="dropdown-item js-scroll-trigger"  href="#footer">sobre la app</a>
+                            </div>
+                        </div>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" data-toggle="modal" data-target="#Modal_login_administracion">Administración</a></li>
                     </ul>
                 </div>
@@ -81,7 +89,7 @@
             </div>
         </section>
         <!-- About Section-->
-        <section class="page-section bg-primary text-white mb-0" id="about">
+        <section class="page-section bg-primary text-white mb-0" id="gestion">
             <div class="container">
                 <!-- About Section Heading-->
                 <h2 class="page-section-heading text-center text-uppercase text-white">Qué es gestion de calidad?</h2>
@@ -105,15 +113,15 @@
                     </div>            </div>
                 <!-- About Section Button-->
                 <div class="text-center mt-4">
-                    <a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/themes/freelancer/">
+                    <a class="btn btn-xl btn-outline-light" href="https://drive.google.com/drive/folders/15VjXdXO1VjGVTE-TJrNMcfFSWxHn741r">
                         <i class="fas fa-download mr-2"></i>
-                        Descague algunos PDFS!
+                        Vea algunos PDFS!
                     </a>
                 </div>
             </div>
         </section>
         <!-- Contact Section-->
-        <section class="page-section" id="contact">
+        <section class="page-section" id="quejas">
             <div class="container">
                 <!-- Contact Section Heading-->
                 <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Enviar Quejas y sugerencias</h2>
@@ -159,7 +167,7 @@
             </div>
         </section>
         <!-- Footer-->
-        <footer class="footer text-center">
+        <footer class="footer text-center" id="footer">
             <div class="container">
                 <div class="row">
                     <!-- Footer Location-->
@@ -208,10 +216,15 @@
         <!-- Contact form JS
         <script src="assets/mail/jqBootstrapValidation.js"></script>
         <script src="assets/mail/contact_me.js"></script>-->
+
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
         
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
         <script src="js/texto.js"></script>
-        @include('modals/modal')        
+        @include('modals/modal')  
+        @include('sweet::alert')              
     </body>
 </html>

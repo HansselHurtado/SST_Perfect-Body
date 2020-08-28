@@ -27,11 +27,11 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Preguntas</a></li>
                         <div class="dropdown">
                             <a class="mx-0 mx-lg-1 nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger dropdown-toggle" href="#" id="dropdownAdministrar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administrar</a>
                             <div class="dropdown-menu" aria-labelledby="dropdownAdministrar">
                                 <a class="dropdown-item" data-toggle="modal" data-target="#Modal_crear_texto" href="#">crear nuevo texto</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#Modal_crear_respuesta" href="#">preguntas y respuestas</a>
                                 <a class="dropdown-item js-scroll-trigger"  href="#textos">editar texto</a>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item  js-scroll-trigger" href="#usuarios_registrados">usuarios registrados</a>
                                 <a class="dropdown-item" href="#">Historial de encuesta</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a class="dropdown-item" href="#">Crear administrador</a>
                             </div>
                         </div>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"  href="#" data-toggle="modal" data-target="#logoutModal">Cerrar sesion</a></li>
@@ -87,7 +87,7 @@
                                 <br>
                                 <img style="width: 150px; height: 150px;" class="img-fluid mx-auto d-block " src="assets/img/discusion.svg" alt="" />
                             </div>                                    
-                            <a data-toggle="modal" data-target="#eliminar_texto" onclick="Eliminar_texto('{{$texto->id_texto}}','{{$texto->titulo}}')" class="close" type="button"  aria-label="Close">
+                            <a data-toggle="modal" title="Eliminar texto" data-target="#eliminar_texto" onclick="Eliminar_texto('{{$texto->id_texto}}','{{$texto->titulo}}')" class="close" type="button"  aria-label="Close">
                                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
                             </a>                            
                         </div>                        

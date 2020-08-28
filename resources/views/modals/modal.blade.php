@@ -25,7 +25,7 @@
                                     <div class="control-group">
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                             <label>Nombre completo</label>
-                                            <input class="form-control" id="name" type="text" name="nombre" placeholder="Ingrese su nombre y apellido" required />
+                                            <input class="form-control" id="name" type="text" name="nombre" placeholder="Ingrese su nombre completo por favor" required />
                                             <p class="help-block text-danger"></p>
                                         </div>
                                     </div>
@@ -60,7 +60,7 @@
 </div>
 
 
-<!-- Modal para los texto-->
+<!-- Modal encuesta-->
 <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -82,35 +82,26 @@
                                     <div class="divider-custom-line"></div>
                                 </div>
                                 <!-- Texto -->
-                                <div>
-                                    <p id="texto" class="lead"> </p>
-                                </div>
-                                <!-- Prguntas-->
-                                <section class="row mb-1">
-                                    <div class="col-md-8 col-12">
-                                        <p id="preguntas" class="lead mb-1"> </p>
-                                    </div>                                                              
-                                </section>  
-                                <div class="control-group">
-                                    <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                        <p class="help-block text-danger"></p>                                          
-                                        <select style="border-radius: 10px; height: 50px; font-size: 20px;" id="email" class="browser-default custom-select mb-4" name="nombre"  required>
-                                            <option value="" selected disabled>Seleccione su nombre</option>                                                                   
-                                            @foreach ($personals as $personal)
-                                                <option value="{{$personal->id_personal}}" >{{$personal->nombre}}</option> 
-                                            @endforeach                                                                                                                  
-                                        </select>                                        
+                                <div class="d-flex flex-column">
+                                    <p id="texto" class="lead"> </p>                                
+                                    <!-- Prguntas-->
+                                    <section  id="preguntas" class="d-flex flex-column ">                                                       
+                                    </section> 
+                                    <div class="control-group">
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <p class="help-block text-danger"></p>                                          
+                                            <select style="border-radius: 10px;  height: 50px; font-size: 20px;" id="email" class="browser-default custom-select mb-4" name="nombre"  required>
+                                                <option value="" selected disabled>Seleccione su nombre</option>                                                                   
+                                                @foreach ($personals as $personal)
+                                                    <option value="{{$personal->id_personal}}" >{{$personal->nombre}}</option> 
+                                                @endforeach                                                                                                                  
+                                            </select>                                        
+                                        </div>
                                     </div>
-                                </div>     
-                                <div class="input-group">
-                                    
-                                    <input style="width: 10px;"  type="text" class="form-control bg-light border-5 small" placeholder="Ingrese su numero de cedula" aria-label="Search" aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                    </div>
-                                </div>      
+                                    <div >
+                                        <input required class="form-control" style=" font-size: 20px;  height: 50px; border-radius: 10px;" name="cedula" type="number" placeholder="Ingrese su numero de cedula">                     
+                                    </div> 
+                                </div>                                                         
                                 <br><br>                 
                                 <button type="submit" class="btn btn-primary">                                
                                     Enviar Encuesta

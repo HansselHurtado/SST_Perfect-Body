@@ -89,7 +89,13 @@ p {
   margin-bottom: 1rem;
 }
 
-
+.w-preguntas{
+  width: 60%;
+  text-align: start;
+}
+.w-respuestas{
+  width: 30%;
+}
 
 abbr[title],
 abbr[data-original-title] {
