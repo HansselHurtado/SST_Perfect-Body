@@ -9,10 +9,6 @@ class Pregunta extends Model
     protected $table = "preguntas"; 
     protected $primaryKey = 'id_pregunta';
 
-    public function registro(){
-        return $this->hasMany('App\Registro','id_pregunta');
-    }
-
     public function respuesta(){
         return $this->hasMany('App\Respuesta','id_respuesta');
     }

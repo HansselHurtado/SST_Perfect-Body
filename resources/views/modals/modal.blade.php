@@ -71,36 +71,44 @@
                 <form id="contactForm" method="POST" action="{{route('guardar_encuenta')}}">
                     @csrf
                     <div class="container">
+                        <br>
+                        <div class="alert alert-success alert-dismissable">
+                            <button type="button" class="close cerrar" data-dismiss="alert">&times;</button>
+                            <strong>¡Recuerde!</strong> para poder hacer la encuesta debe estár registrado, si ya lo hizo haga caso omiso. Gracias.
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div  class="my-3">
+                                <input required class="form-control" style=" font-size: 20px;  height: 50px; width: 300px; border-radius: 10px;" name="cedula" id="cedula" type="number" placeholder="Ingrese su numero de cedula">                     
+                            </div> 
+                            <div class=" mx-2 my-4">
+                                <a class="btn btn-primary" id="anadir_personal"> Añadir</a>
+                            </div>
+                            <div class="mx-2">
+                                <p class="help-block text-danger"></p>
+                                <input required readonly  class="form-control" style=" font-size: 20px;  height: 50px; width: 300px; border-radius: 10px;" name="nombre_personal" id="nombre_personal" type="text" placeholder="Añadir para traer su nombre">                                                          
+                                <input required class="form-control" style=" display: none" name="id_personal" id="id_personal" type="text">
+                                <strong><p class="text-danger" id="error"> </p> </strong>                                                     
+                            </div>
+                            
+                        </div>
+                        <div class="divider-custom">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                            <div class="divider-custom-line"></div>
+                        </div>
                         <div class="row justify-content-center">
-                            <div class="col-lg-8">
+                            
+                            <div class="col-lg-10">
                                 <!-- Portfolio Modal - Title-->
                                 <h4 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="titulo"></h4>
                                 <!-- Icon Divider-->
-                                <div class="divider-custom">
-                                    <div class="divider-custom-line"></div>
-                                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                    <div class="divider-custom-line"></div>
-                                </div>
+                                <br>
                                 <!-- Texto -->
                                 <div class="d-flex flex-column">
                                     <p id="texto" class="lead"> </p>                                
                                     <!-- Prguntas-->
                                     <section  id="preguntas" class="d-flex flex-column ">                                                       
-                                    </section> 
-                                    <div class="control-group">
-                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                            <p class="help-block text-danger"></p>                                          
-                                            <select style="border-radius: 10px;  height: 50px; font-size: 20px;" id="email" class="browser-default custom-select mb-4" name="nombre"  required>
-                                                <option value="" selected disabled>Seleccione su nombre</option>                                                                   
-                                                @foreach ($personals as $personal)
-                                                    <option value="{{$personal->id_personal}}" >{{$personal->nombre}}</option> 
-                                                @endforeach                                                                                                                  
-                                            </select>                                        
-                                        </div>
-                                    </div>
-                                    <div >
-                                        <input required class="form-control" style=" font-size: 20px;  height: 50px; border-radius: 10px;" name="cedula" type="number" placeholder="Ingrese su numero de cedula">                     
-                                    </div> 
+                                    </section>                                     
                                 </div>                                                         
                                 <br><br>                 
                                 <button type="submit" class="btn btn-primary">                                
@@ -142,13 +150,13 @@
                                     <div class="control-group">
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                             <label>Correo o Nombre de usuario</label>
-                                            <input class="form-control @error('email') is-invalid @enderror" id="email" type="email" name="email" value="{{ old('email') }}"  autofocus placeholder="nombre de usuario o correo electronico" required />
-                                            <p class="help-block text-danger"></p>
-                                            @error('email')
+                                            <input type="login" class="form-control form-control-user @error('login') is-invalid @enderror" id="login"   name="login" value="{{ old('login') }}"  autofocus placeholder=" Nombre de usuario o Correo electronico">
+        
+                                                @error('login')
                                                 <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
+                                                    <strong>{{ $message }}</strong>
                                                 </span>
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="control-group">

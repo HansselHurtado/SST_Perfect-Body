@@ -136,9 +136,7 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Seguro que deseas eliminar?</h5>
           </div>
-          <div class="modal-body">Si eliminas  el texto con titulo <strong id="titulo_modal_eliminar"></strong>, se eliminará todo lo que esté asociado a el. <br>
-            Selecciona "Eliminar" para continuar
-            o "Cancelar" para abortar.
+          <div class="modal-body" id="titulo_modal_eliminar">
           </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>             
@@ -206,6 +204,186 @@
                                             <button class="btn btn-danger btn-lg" type="submit" id="eliminar_pregunta" onclick="eliminar_preguntaa();" disabled>Eliminar pregunta</button>
                                         </form> 
                                     </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver los registros de encuesta-->
+<div class="portfolio-modal modal fade" id="modal_registro" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+            </button>
+            <div class="modal-body text-center">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <h4 class="portfolio-modal-title text-secondary text-uppercase mb-0">Historial de encuesta</h4>
+                            <!-- Icon Divider-->
+                            <div class="divider-custom">
+                                <div class="divider-custom-line"></div>
+                                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                <div class="divider-custom-line"></div>
+                            </div>
+                            <div>
+                                <h4 id="nombre_usuario"></h4>
+                            </div>                               
+                            <div>                                    
+                                <div class="d-flex flex-column" id="titulo_encuesta">
+
+                                </div>
+                            </div>                                                                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar un usuario-->
+<div class="portfolio-modal modal fade" id="editar_usuario" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+            </button>
+            <div class="modal-body text-center">
+                <form id="contactForm" method="POST" action="{{route('editar_personal')}}">
+                    @csrf
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <h4 class="portfolio-modal-title text-secondary text-uppercase " id="personal"></h4>                                                            
+                                <select style="border-radius: 10px; height: 50px; font-size: 20px;"  class="browser-default custom-select mb-4" name="departamento"  required>
+                                                                        
+                                    <option id="departamentos_personal" selected></option>                                                                   
+                                    <@foreach ($departamentos as $departamento)
+                                         <option value="{{$departamento->id_departamento}}" >{{$departamento->departamento}}</option> 
+                                    @endforeach                                  
+                                                                                                                                                  
+                                </select>                                                           
+                                <br><br> 
+                                <div class="row">
+                                    <button type="submit" class="btn btn-primary mx-3">                                
+                                        Editar 
+                                    </button>                                    
+                                </div>                                                   
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para crear departamento-->
+<div class="portfolio-modal modal fade" id="Modal_crear_departamento" tabindex="-1" role="dialog" aria-labelledby="portfolioModal2Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+            </button>
+            <div class="modal-body text-center">
+                <section class="page-section" id="contact">
+                    <div class="container">
+                        <!-- Contact Section Heading-->
+                        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Crear departamento</h2>
+                        <!-- Icon Divider-->
+                        <div class="divider-custom">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        <!-- Contact Section Form-->
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <form method="POST" action="{{route('crear_departamento')}}">
+                                    @csrf
+                                    <div class="control-group">
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                                <label>Nombre del departamento</label>
+                                                <input class="form-control" id="name" type="text" name="departamento" placeholder="Ingrese el nombre del departamento" required />
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <br>                                                                   
+                                    <div class="form-group mx-auto">
+                                        <button class="btn btn-primary btn-lg" type="submit">Guardar</button>
+                                    </div>                                
+                                </form>                                      
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para crear administrador-->
+<div class="portfolio-modal modal fade" id="Modal_crear_administrador" tabindex="-1" role="dialog" aria-labelledby="portfolioModal2Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fas fa-times"></i></span>
+            </button>
+            <div class="modal-body text-center">
+                <section class="page-section" id="contact">
+                    <div class="container">
+                        <!-- Contact Section Heading-->
+                        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Crear administrador</h2>
+                        <!-- Icon Divider-->
+                        <div class="divider-custom">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        <!-- Contact Section Form-->
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <form method="POST" action="{{route('registrar')}}">
+                                    @csrf
+                                    <div class="control-group">
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                                <label>Nombre Completo</label>
+                                                <input class="form-control"  type="text" name="name" placeholder="Ingrese el nombre completo" required />
+                                            </div> 
+                                        </div>
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                                <label>Nombre de usuario--</label>
+                                                <input class="form-control"  type="text" name="user_name" placeholder="Ingrese nombre de usuario" required />
+                                            </div> 
+                                        </div>
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                                <label>Correo electronico</label>
+                                                <input class="form-control"  type="email" name="email" placeholder="Ingrese el correo electronico" required />
+                                            </div> 
+                                        </div>
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                                <label>Contraseña</label>
+                                                <input class="form-control"  type="password" name="password" placeholder="Ingrese la contraseña" required />
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <br>                                                                   
+                                    <div class="form-group mx-auto">
+                                        <button class="btn btn-primary btn-lg" type="submit">Crear</button>
+                                    </div>                                
+                                </form>                                      
                             </div>
                         </div>
                     </div>

@@ -14,18 +14,14 @@ class Registro extends Model
         return $this->belongsTo('App\Personal');
     }
 
-    public function pregunta()//relacion inversa de uno a mucho
-    {
-        return $this->belongsTo('App\Pregunta');
-    }
-
-    /*public function respuesta()//relacion inversa de uno a mucho
-    {
-        return $this->belongsTo('App\Respuesta');
-    }*/
-
     public function texto()//relacion inversa de uno a mucho
     {
         return $this->belongsTo('App\Texto');
     }
+
+    public function registro_pregunta_respuesta()
+    {
+        return $this->hasMany('App\Registro_pregunta_respuesta','id_registro');
+    }
+
 }

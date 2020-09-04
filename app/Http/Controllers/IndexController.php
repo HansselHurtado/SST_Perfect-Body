@@ -7,10 +7,12 @@ use App\Texto;
 use App\Respuesta;
 use App\Registro;
 use App\Pregunta;
+use App\Registro_pregunta_respuesta;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\FuncCall;
 
 class IndexController extends Controller
 {
@@ -27,14 +29,25 @@ class IndexController extends Controller
         return view('home2',compact('departamentos','textos','personals'));
     }
 
-    public function index_administracion(){        
-        $textos = Texto::all();        
-        $preguntas = Pregunta::where('opciones',1)->get();        
-        $personals = DB::table('personals')
-                        ->join('departamentos','personals.id_departamento','departamentos.id_departamento')
-                        ->select('personals.id_personal','personals.nombre','personals.cedula',
-                                'departamentos.departamento as nombre_departamento')->paginate(5);               
-        return view('administracion',compact('personals','textos','preguntas'));
+    public function index_administracion(){    
+        $date = Carbon::now();
+        $date = $date->format('Y-m-d'); 
+        $textos = Texto::all(); 
+        $departamentos = departamento::all();
+        $preguntas = Pregunta::where('opciones',1)->orderBy('id_pregunta','desc')->get();
+        $registros= Registro::join('personals','registros.id_personal','personals.id_personal')
+                            ->join('departamentos','personals.id_departamento','departamentos.id_departamento')                                    
+                            ->select('registros.id_registro','registros.id_personal','registros.id_texto','registros.fecha',
+                                    'personals.nombre as nombre','personals.cedula as cedula'
+                                    ,'departamentos.departamento as nombre_departamento')                                           
+                            ->where('fecha',$date)->orderBy('personals.nombre')->get();
+
+        //trae todos los registro que tiene un usuario pasandole como paramero el id del usuario y la fecha                                    
+        $registro_encuesta = Registro_pregunta_respuesta::where('id_registro',2)->get();   
+        $personals = Personal::join('departamentos','personals.id_departamento','departamentos.id_departamento')
+                            ->select('personals.id_personal','personals.nombre','personals.cedula',
+                                'departamentos.departamento as nombre_departamento')->orderBy('personals.nombre')->paginate(10);               
+        return view('administracion',compact('personals','textos','preguntas','registros','departamentos','date'));
     }
 
     public function registrar_personal(Request $request){
@@ -51,36 +64,81 @@ class IndexController extends Controller
         return redirect()->back();
     }
 
+    public function texto_personal($date, $id_texto){
+        return Registro::join('personals','registros.id_personal','personals.id_personal')
+                            ->join('departamentos','personals.id_departamento','departamentos.id_departamento')                                    
+                            ->select('registros.id_registro','registros.id_personal','registros.id_texto','registros.fecha',
+                                    'personals.nombre as nombre','personals.cedula as cedula'
+                                    ,'departamentos.departamento as nombre_departamento')                                           
+                                    ->where('id_texto',$id_texto)->where('fecha',$date)->orderBy('personals.nombre')->get();
+    }
+    public function texto_personal_solo_fecha($date){
+        return Registro::join('personals','registros.id_personal','personals.id_personal')
+                            ->join('departamentos','personals.id_departamento','departamentos.id_departamento')                                    
+                            ->select('registros.id_registro','registros.id_personal','registros.id_texto','registros.fecha',
+                                    'personals.nombre as nombre','personals.cedula as cedula'
+                                    ,'departamentos.departamento as nombre_departamento')                                           
+                            ->where('fecha',$date)->orderBy('personals.nombre')->get();
+    }
+
     public function textos($id_texto){
-        return $texto = Texto::with(array('pregunta'=> function($respuesta){
+        return Texto::with(array('pregunta'=> function($respuesta){
             $respuesta->join('respuestas','preguntas.id_pregunta','respuestas.id_pregunta');
             $respuesta->select('preguntas.id_pregunta','preguntas.pregunta','preguntas.id_texto','preguntas.opciones','respuestas.id_pregunta','respuestas.id_respuesta','respuestas.respuesta as res');
         }))->where('id_texto',$id_texto)->get(); 
     }
     
     public function editar_textos($id_texto){
-        return $texto = Texto::with(array('pregunta'))->where('id_texto',$id_texto)->get(); 
+        return Texto::with(array('pregunta'))->where('id_texto',$id_texto)->get(); 
+    }
+    
+    public function preguntas_respuestas($date, $id_personal){        
+        return Registro::with('registro_pregunta_respuesta')
+                            ->join('textos','registros.id_texto','textos.id_texto')
+                            ->where('id_personal',$id_personal)->where('fecha',$date)->get();
+    }
+    public function preguntas_respuestas_x_titulo($date, $id_personal,$id_texto){        
+        return Registro::with('registro_pregunta_respuesta')
+                            ->join('textos','registros.id_texto','textos.id_texto')
+                            ->where('id_personal',$id_personal)->where('fecha',$date)->where('id_texto',$id_texto)->get();
+    }
+
+    public function personal($cedula){
+        return Personal::where('cedula', $cedula)->get();         
     }
 
     public function guardar_encuesta(Request $request){        
-       $personal = Personal::where('id_personal',$request->nombre)->where('cedula',$request->cedula)->first();
-       if($personal != null){
+        $date = Carbon::now();
+        $date = $date->format('Y-m-d');
+        $registro_buscar = Registro::where('id_personal',$request->id_personal)->where('id_texto',$request->texto)->where('fecha',$date)->first();
+        if($registro_buscar == null){
+            $registro_encuesta = new Registro;
+            $registro_encuesta->id_personal = $request->id_personal;
+            $registro_encuesta->id_texto = $request->texto;            
+            $registro_encuesta->fecha = $date;
+            $registro_encuesta->save();
             for ($i=2; $i<=$request->variable; $i++){
-                $registro_encuesta = new Registro;
-                $registro_encuesta->id_personal = $request->nombre;
-                $registro_encuesta->id_texto = $request->texto;
-                $registro_encuesta->id_pregunta = $request->input("pregunta$i");
-                $registro_encuesta->respuesta = $request->input("respuesta$i");
-                $date = Carbon::now();
-                $date = $date->format('Y-m-d');
-                $registro_encuesta->fecha = $date;
-                $registro_encuesta->save();
+                $registro_pregunta_respuesta = new Registro_pregunta_respuesta();               
+                $registro_pregunta_respuesta->id_registro = $registro_encuesta->id_registro;
+                $registro_pregunta_respuesta->pregunta = $request->input("pregunta$i");
+                $registro_pregunta_respuesta->respuesta = $request->input("respuesta$i");
+                $registro_pregunta_respuesta->save();
             }
-            return redirect()->back();  
         }else{
-            alert()->error('Notificación de Error');
-            return ('numero de cedula invalido');  
-        }        
+            return "ya hay una inspeccion hecha el dia de hoy";
+        }
+        return redirect()->back();  
+             
+    }
+
+    public function crear_departamento(Request $request){        
+        if(!$this->validar_departamento($request->departamento)){
+            $departamento = new departamento();
+            $departamento->departamento = $request->departamento;
+            $departamento->save();
+            return redirect()->back();
+        }
+        return "Este departamento ya existe";
     }
 
     public function crear_texto(Request $request){
@@ -117,9 +175,31 @@ class IndexController extends Controller
         return redirect()->back();  
     }
 
+    public function editar_personal(Request $request){
+        $personal = Personal::findOrFail($request->id_personal);
+        $personal->nombre = $request->nombre;
+        $personal->cedula = $request->cedula;
+        $personal->id_departamento = $request->departamento;
+        $personal->save();
+        return redirect()->back(); 
+    }
+
+    public function editar_personal_api($id_personal){
+        $personal = Personal::join('departamentos','personals.id_departamento','departamentos.id_departamento')                                    
+                        ->where('id_personal',$id_personal)->first();
+        $departamentos = departamento::all();
+        return response()->json(array("personal" => $personal,"departamentos" => $departamentos));       
+    }
+
     public function eliminar_texto($id_texto){
         $texto = Texto::findOrFail($id_texto);
         $texto->delete();
+        return redirect()->back(); 
+    }
+
+    public function eliminar_personal($id_personal){
+        $personal = Personal::findOrFail($id_personal);
+        $personal->delete();
         return redirect()->back(); 
     }
 
@@ -145,5 +225,15 @@ class IndexController extends Controller
             $respuesta->save();
         }
         return redirect()->back(); 
+    }
+
+    public function validar_departamento($nombre_departamento){
+        $departamentos = departamento::all();
+        foreach ($departamentos as $departamento){
+            if($departamento->departamento == $nombre_departamento){
+                return true;
+            }
+        }
+        return false;
     }
 }

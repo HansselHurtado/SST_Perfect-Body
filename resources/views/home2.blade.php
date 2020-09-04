@@ -27,17 +27,22 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Preguntas</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Encuestas</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" data-toggle="modal" data-target="#Modal_registrar_personal">Registrate</a></li>
                         <div class="dropdown">
                             <a class="mx-0 mx-lg-1 nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger dropdown-toggle" href="#" id="dropdownAdministrar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Recursos</a>
                             <div class="dropdown-menu" aria-labelledby="dropdownAdministrar">
                                 <a class="dropdown-item js-scroll-trigger"  href="#gestion">Qué es gestion de calidad?</a>
                                 <a class="dropdown-item js-scroll-trigger"  href="#quejas">enviar quejas y sugerencia</a>
+                                <a class="dropdown-item js-scroll-trigger"  href="{{route('administracion')}}">Administracion</a>
                                 <a class="dropdown-item js-scroll-trigger"  href="#footer">sobre la app</a>
                             </div>
                         </div>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" data-toggle="modal" data-target="#Modal_login_administracion">Administración</a></li>
+                        @if (Auth::User())
+                            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"  href="{{route('administracion')}}">Administración</a></li>
+                        @else
+                            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" data-toggle="modal" data-target="#Modal_login_administracion">Administración</a></li>
+                        @endif                   
                     </ul>
                 </div>
             </div>

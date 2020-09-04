@@ -13,7 +13,4 @@ class departamento extends Model
         return $this->hasMany('App\Personal','id_departamento');
     }
 
-    public function registro(){
-        return $this->hasMany('App\Registro','id_departamento');
-    }
 }

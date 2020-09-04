@@ -39,14 +39,22 @@
                             <a class="mx-0 mx-lg-1 nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger dropdown-toggle" href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones de usuario</a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item  js-scroll-trigger" href="#usuarios_registrados">usuarios registrados</a>
-                                <a class="dropdown-item" href="#">Historial de encuesta</a>
-                                <a class="dropdown-item" href="#">Crear administrador</a>
+                                <a class="dropdown-item  js-scroll-trigger" href="#historial_encuesta" id="id_historial_encuesta">Historial de encuesta</a>
+                                <a class="dropdown-item js-scroll-trigger"  data-toggle="modal" data-target="#Modal_crear_departamento" href="#">Crear Departamento</a>
+                                <a class="dropdown-item js-scroll-trigger "  data-toggle="modal" data-target="#Modal_crear_administrador" href="#">Crear administrador</a>
                             </div>
                         </div>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"  href="#" data-toggle="modal" data-target="#logoutModal">Cerrar sesion</a></li>
                     </ul>
+                    <div class="dropdown">
+                        <a class="mr-2 mx-3 d-none text-white d-lg-inline text-gray-600 small js-scroll-trigger dropdown-toggle" href="#" id="dropdownMenuCerrarSesion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <strong>{{ auth()->user()->name }}</strong></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuCerrarSesion">
+                            <a class=" dropdown-item nav-link " href="{{route('home2')}}">Ir a encuestas</a>
+                            <a class=" dropdown-item nav-link "  href="#" data-toggle="modal" data-target="#logoutModal">Cerrar sesion</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
         </nav>
         <!-- Masthead-->
         <header class="masthead bg-primary text-white text-center">
@@ -95,6 +103,72 @@
                 </div>
             </div>
         </section>
+        
+        
+        <!-- tabla de historial de encuesta -->
+        <section class="page-section bg-primary text-white mb-0 my-3 " id="historial_encuesta">
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-white">Historial de encuesta</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="ml-25 py-3 w-respuestas">
+                        <select style="border-radius: 10px; height: 50px; font-size: 20px;" id="pregunta_seleccionada_personal" class="browser-default custom-select mb-4" name=""  required>
+                            <option value="" selected >Ningun titulo Seleccionado</option>                                                                   
+                            @foreach ($textos as $texto)
+                                <option value="{{$texto->id_texto}}" >{{$texto->titulo}}</option> 
+                            @endforeach                                                                                         
+                        </select>
+                    </div>
+                    <div class="w-60  row justify-content-end my-4">
+                        <div class="">
+                            <label class="" for=""> Buscar por fecha</label>
+                        </div>
+                        <div class="mx-3 d-flex flex-column">
+                            <input name="fecha" class="form-control form-control-user mx-3" type="date" id="fecha_personal" required>
+                            <div class="mx-3">
+                                <strong id="error_busqueda" class="text-center text-danger animacion"></strong>
+                            </div>
+                        </div>
+                        
+                        <div class=" mx-5">
+                            <a class="btn btn-dark" id="buscar_personal">buscar</a>
+                        </div>
+                    </div>            
+                </div>
+                <div class="text-left">
+                    <span>Fecha de registro <strong id="fecha_registro">{{$date}}</strong></span>
+                </div>
+                <table class="table table-bordered"  width="100%" cellspacing="0">
+                    <thead>
+                        <tr style="text-align: center;" class="text-light">
+                            <th>Nombre completo</th>                                    
+                            <th>Cedula</th>
+                            <th>Departamento</th>                         
+                        </tr>
+                    </thead>
+                    <tbody id="table_personal">
+                        @php($i="")         
+                        @foreach ($registros as $registro )
+                            @if($registro->nombre != $i)
+                                <tr style="text-align: center;">
+                                    <th><a class="btn btn-outline-light" onclick="ver_registro_encuesta('{{$registro->nombre}}','{{$registro->fecha}}','{{$registro->id_personal}}')" data-toggle="modal" data-target="#modal_registro" href="">{{$registro->nombre}}</a></th>
+                                    <th>{{$registro->cedula}}</th>
+                                    <th>{{$registro->nombre_departamento}}</th>                                    
+                                </tr> 
+                                @php($i = $registro->nombre) 
+                            @endif                                             
+                        @endforeach   
+                    </tbody>
+                </table>                  
+            </div>
+        </section>
+
         <!-- tabla de usuarios registrador -->
         <section class="page-section bg-primary text-white mb-0" id="usuarios_registrados">
             <div class="container">
@@ -117,9 +191,25 @@
                     <tbody>
                         @foreach ($personals as $personal )
                             <tr style="text-align: center;">
-                                <th>{{$personal->nombre}}</th>
+                                <th> 
+                                    <button class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#editar_usuario" onclick="editar_personal('{{$personal->id_personal}}')">
+                                        <span  aria-hidden="true">                        
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-grin-beam"></i>
+                                        </span>
+                                        <span class="text">{{$personal->nombre}}</span>                                        
+                                    </button>
+                                </th>
                                 <th>{{$personal->cedula}}</th>
                                 <th>{{$personal->nombre_departamento}}</th>
+                                <td style="text-align: center;"> 
+                                    <button class="btn btn-danger btn-icon-split" data-toggle="modal" data-target="#eliminar_texto" onclick="Eliminar_personal('{{$personal->id_personal}}','{{$personal->nombre}}')">
+                                      <span  aria-hidden="true">                        
+                                      <span class="icon text-white-50">
+                                        <i class="fas fa-trash"></i>
+                                      </span>
+                                    </button>
+                                </td>
                             </tr>                   
                         @endforeach   
                     </tbody>
@@ -127,63 +217,8 @@
                 {{$personals->links()}}          
                 
             </div>
-        </section>
-
+        </section>        
         
-        
-        <!-- Contact Section-->
-        <section class="page-section" id="contact">
-            <div class="container">
-                <!-- Contact Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contact Me</h2>
-                <!-- Icon Divider-->
-                <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                    <div class="divider-custom-line"></div>
-                </div>
-                <!-- Contact Section Form-->
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                        <form id="contactForm" name="sentMessage" novalidate="novalidate">
-                            <div class="control-group">
-                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                    <label>Name</label>
-                                    <input class="form-control" id="name" type="text" placeholder="Name" required="required" data-validation-required-message="Please enter your name." />
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                    <label>Email Address</label>
-                                    <input class="form-control" id="email" type="email" placeholder="Email Address" required="required" data-validation-required-message="Please enter your email address." />
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                    <label>Phone Number</label>
-                                    <input class="form-control" id="phone" type="tel" placeholder="Phone Number" required="required" data-validation-required-message="Please enter your phone number." />
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                    <label>Message</label>
-                                    <textarea class="form-control" id="message" rows="5" placeholder="Message" required="required" data-validation-required-message="Please enter a message."></textarea>
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <br />
-                            <div id="success"></div>
-                            <div class="form-group"><button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Send</button></div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Footer-->
         <!-- Footer-->
         <footer class="footer text-center">
             <div class="container">

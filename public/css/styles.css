@@ -94,7 +94,32 @@ p {
   text-align: start;
 }
 .w-respuestas{
-  width: 30%;
+  width: 35%;
+}
+.w-60{
+  width: 60%;
+}
+.w-50{
+  width: 40% !important;
+}
+.ocultar {
+  display: none;
+}
+.mostrar {
+  display: block;
+}
+.cerrar {
+  top: -2px !important;
+}
+.rodar {
+  padding-right: 50px;
+  margin-right: 300px;
+}
+.rodarr {
+  margin-right: 10px;
+}
+.color_a{
+  background:#212529 ;
 }
 
 abbr[title],
@@ -395,6 +420,18 @@ h5, .h5 {
 
 h6, .h6 {
   font-size: 1rem;
+}
+
+@keyframes animacion {
+  from { opacity: 0.1}
+  to { opacity: 1}
+}
+
+.animacion {
+  animation-name: animacion;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
 }
 
 .single-line {
