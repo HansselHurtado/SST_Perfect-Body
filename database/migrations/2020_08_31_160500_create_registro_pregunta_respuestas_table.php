@@ -20,7 +20,7 @@ class CreateRegistroPreguntaRespuestasTable extends Migration
             $table->foreign('id_registro')->references('id_registro')->on('registros')->onDelete('cascade');
 
             $table->string('pregunta');
-            $table->string('respuesta');
+            $table->longText('respuesta');
             $table->timestamps();
         });
     }

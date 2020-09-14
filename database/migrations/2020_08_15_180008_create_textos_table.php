@@ -17,7 +17,9 @@ class CreateTextosTable extends Migration
             $table->increments('id_texto');
             $table->string('titulo');
             $table->string('foto')->nullable();
-            $table->longText('texto');
+            $table->string('nombre_enlace')->nullable();
+            $table->longText('enlace')->nullable();
+            $table->longText('texto')->nullable();
             $table->timestamps();
         });
     }

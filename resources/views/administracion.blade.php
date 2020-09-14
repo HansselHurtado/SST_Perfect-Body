@@ -15,12 +15,17 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.8.0/sweetalert2.min.css" rel="stylesheet" />
+
     </head>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top">SSt Calidad</a>
+                <img class="mx-2 margin-t " style="width: 100px; border-radius:20px;" src="assets/img/favicon.png" alt="">                                
+
+                <a class="navbar-brand js-scroll-trigger" href="#page-top">Perfect Body</a>
                 <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
@@ -227,10 +232,9 @@
                     <div class="col-lg-4 mb-5 mb-lg-0">
                         <h4 class="text-uppercase mb-4">Ubicacion</h4>
                         <p class="lead mb-0">
-                            Hanssel Hurtado Buendia
-                            Desarrollador web
+                            CRA .20 No 15-110 Barrio Jardin
                             <br />
-                            3006408288
+                            Santa Marta--Magdalena
                         </p>
                     </div>
                     <!-- Footer Social Icons-->
@@ -245,8 +249,11 @@
                     <div class="col-lg-4">
                         <h4 class="text-uppercase mb-4">Sobre esta Aplicacion web</h4>
                         <p class="lead mb-0">
-                           Aplicacion hecha por tecnolgia perfect body, Desarrollada por Hanssel Hurtado Buendia
-                            <a href="#">Desarrollador web</a>                            
+                           Aplicacion Realizada por perfect body Tecnologia, Desarrollada por Hanssel Hurtado Buendia
+                           <a href="#">Ingeniero de sistemas,</a>                            
+                           <a href="#">Desarrollador web</a>                            
+                           <a href="#">3006408288</a>                            
+                           <a href="#">Hansselhurtado@gmail.com</a>                           
                         </p>
                     </div>
                 </div>
@@ -254,7 +261,7 @@
         </footer>
         <!-- Copyright Section-->
         <div class="copyright py-4 text-center text-white">
-            <div class="container"><small>Copyright © Perfect Body 2020 © Tecnogia e investigación</small></div>
+            <div class="container"><small>Copyright © Perfect Body 2020 © Tecnología e investigación</small></div>
         </div>
         <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
         <div class="scroll-to-top d-lg-none position-fixed">
@@ -269,10 +276,14 @@
         <!-- Contact form JS
         <script src="assets/mail/jqBootstrapValidation.js"></script>
         <script src="assets/mail/contact_me.js"></script>-->
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.8.0/sweetalert2.min.js"></script>
         
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
         <script src="js/texto.js"></script>
         @include('modals/modal_administracion')        
+        @include('modals/moda_admin_ver_historial')        
     </body>
 </html>

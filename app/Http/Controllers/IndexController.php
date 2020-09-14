@@ -10,6 +10,7 @@ use App\Pregunta;
 use App\Registro_pregunta_respuesta;
 use Carbon\Carbon;
 use DB;
+use \ PDF ;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\FuncCall;
@@ -19,7 +20,7 @@ class IndexController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only('index_administracion','crear_texto','editar_texto','eliminar_texto','eliminar_pregunta');
+        $this->middleware('auth')->only('index_administracion','crear_texto','editar_texto','eliminar_texto','eliminar_pregunta','guardar_pdf');
     }
 
     public function index(){
@@ -58,8 +59,9 @@ class IndexController extends Controller
             $personal->cedula = $request->cedula;
             $personal->id_departamento = $request->departamento;
             $personal->save();
+            alert()->success('Todo ha salido bien','Usuario registrado corerectamente');
         }else{
-            return ('este numero de cedula ya existe');
+            alert()->warning('Usuario ya existe',' Este Usuario ya se encuentra registrado')->persistent('Close');
         }
         return redirect()->back();
     }
@@ -89,7 +91,11 @@ class IndexController extends Controller
     }
     
     public function editar_textos($id_texto){
-        return Texto::with(array('pregunta'))->where('id_texto',$id_texto)->get(); 
+        /*return Texto::with(array('pregunta'))
+                    ->where('id_texto',$id_texto)->get(); */
+        return Texto::with(array('pregunta' => function($q){
+            $q->join('respuestas','preguntas.id_pregunta','respuestas.id_pregunta');
+        }))->where('id_texto',$id_texto)->get();
     }
     
     public function preguntas_respuestas($date, $id_personal){        
@@ -124,11 +130,11 @@ class IndexController extends Controller
                 $registro_pregunta_respuesta->respuesta = $request->input("respuesta$i");
                 $registro_pregunta_respuesta->save();
             }
+            alert()->success('Encuesta realizada','Encuesta realizada correctamente');
         }else{
-            return "ya hay una inspeccion hecha el dia de hoy";
+            alert()->error('Error de evaluacion','Ya hay una encuesta realizada por usted el dia de hoy')->persistent('Close');
         }
-        return redirect()->back();  
-             
+        return redirect()->back();            
     }
 
     public function crear_departamento(Request $request){        
@@ -138,13 +144,23 @@ class IndexController extends Controller
             $departamento->save();
             return redirect()->back();
         }
-        return "Este departamento ya existe";
+        return "el departamento ya existe";
+        alert()->error('Ya existe un departamento','Este departamento ya existe');
+        return redirect()->back();
     }
 
     public function crear_texto(Request $request){
         $texto = new Texto;
         $texto->titulo = $request->titulo;
         $texto->texto = $request->texto;
+        $texto->enlace = $request->enlace;
+        $texto->nombre_enlace = $request->nombre_enlace;
+        if($request->hasFile("foto")){  
+            $file = $request->file("foto");               
+            $name = time().$file->getClientOriginalName();
+            $texto->foto = $name;
+            $file->move(public_path().'/images/foto_infografias/', $name);                
+        } 
         $texto->save();
         return redirect()->back();  
     }
@@ -152,7 +168,15 @@ class IndexController extends Controller
     public function editar_texto(Request $request){
         $texto = Texto::findOrFail($request->id_texto);
         $texto->titulo = $request->titulo;
+        $texto->enlace = $request->enlace;
+        $texto->nombre_enlace = $request->nombre_enlace;
         $texto->texto = $request->texto;
+        if($request->hasFile("foto")){  
+            $file = $request->file("foto");               
+            $name = time().$file->getClientOriginalName();
+            $texto->foto = $name;
+            $file->move(public_path().'/images/foto_infografias/', $name);                
+        }
         $texto->save();
         for ($i=1; $i<=$request->variable; $i++){
             if($request->input("id_pregunta$i") != null){
@@ -235,5 +259,16 @@ class IndexController extends Controller
             }
         }
         return false;
+    }
+
+    public function guardar_pdf($date, $id_personal, $nombre){
+        $nombre = $nombre;
+        $date = $date;
+        $registros =  Registro::with('registro_pregunta_respuesta')
+                            ->join('textos','registros.id_texto','textos.id_texto')
+                            ->where('id_personal',$id_personal)->where('fecha',$date)->get();
+       // return view('modals/historial_encuesta_pdf',compact('registros'));
+        $pdf = PDF::loadView('modals/historial_encuesta_pdf',compact('registros','nombre','date'));
+        return $pdf->download('historial.pdf');
     }
 }

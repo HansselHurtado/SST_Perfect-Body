@@ -34,6 +34,7 @@ Route::post('/administracion/eliminar-pregunta/{id_pregunta}','IndexController@e
 Route::delete('/administracion/eliminar-personal/{id_personal}','IndexController@eliminar_personal');
 Route::post('/administracion/editar-personal','IndexController@editar_personal')->name('editar_personal');
 Route::post('/administracion/crear-departamento','IndexController@crear_departamento')->name('crear_departamento');
+Route::get('/administracion/guardar_pdf/{fecha}/{id_personal}/{nombre}','IndexController@guardar_pdf')->name('guardar_pdf');
 
 
 

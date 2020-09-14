@@ -99,6 +99,9 @@ p {
 .w-60{
   width: 60%;
 }
+.w-80{
+  width: 80%;
+}
 .w-50{
   width: 40% !important;
 }
@@ -121,6 +124,40 @@ p {
 .color_a{
   background:#212529 ;
 }
+
+.margin-t {
+  margin-top: -30px
+}
+/* text area*/
+
+.pink-textarea textarea.md-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid #1abc9c;
+  box-shadow: 0 1px 0 0 #1abc9c;
+}
+.active-pink-textarea.md-form label.active {
+  color: #1abc9c;
+}
+.active-pink-textarea.md-form textarea.md-textarea:focus:not([readonly])+label {
+  color: #1abc9c;
+}
+
+.active-pink-textarea-2 textarea.md-textarea {
+  border-bottom: 1px solid #1abc9c;
+  box-shadow: 0 1px 0 0 #1abc9c;
+}
+.active-pink-textarea-2.md-form label.active {
+  color: #1abc9c;
+}
+.active-pink-textarea-2.md-form label {
+  color: #1abc9c;
+}
+.active-pink-textarea-2.md-form textarea.md-textarea:focus:not([readonly])+label {
+  color: #1abc9c;
+}
+
+
+
+/*text area */
 
 abbr[title],
 abbr[data-original-title] {

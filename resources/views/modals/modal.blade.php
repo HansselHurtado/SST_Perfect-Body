@@ -105,13 +105,17 @@
                                 <br>
                                 <!-- Texto -->
                                 <div class="d-flex flex-column">
-                                    <p id="texto" class="lead"> </p>                                
+                                    <div id="foto_texto" class="mx-auto w-80">
+                                    </div>
+                                    <p id="texto" class="lead my-3"> </p>                                
                                     <!-- Prguntas-->
                                     <section  id="preguntas" class="d-flex flex-column ">                                                       
-                                    </section>                                     
+                                    </section>
+                                    <div id="enlace" class="text-left w-80">
+                                    </div>                                     
                                 </div>                                                         
                                 <br><br>                 
-                                <button type="submit" class="btn btn-primary">                                
+                                <button type="submit" class="btn btn-primary" id="enviar_encuesta">                                
                                     Enviar Encuesta
                                 </button>
                             </div>

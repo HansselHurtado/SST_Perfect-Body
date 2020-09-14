@@ -53,21 +53,45 @@
                         <div class="row">
                             <div class="col-lg-8 mx-auto">
                                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                                <form id="contactForm" method="POST" action="{{route('crear_texto')}}">
+                                <form id="contactForm" method="POST" action="{{route('crear_texto')}}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="control-group">
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                             <label>Titulo del texto</label>
-                                            <input class="form-control" id="name" type="text" name="titulo" placeholder="Ingrese titulo de texto" required />
+                                            <input class="form-control titulo_texto" id="name" type="text" name="titulo" placeholder="Ingrese titulo de texto" required />
                                             <p class="help-block text-danger"></p>
+                                            <p class="text-danger" id="requerido_titulo"></p>
+
                                         </div>
-                                    </div>
+                                    </div>                                   
                                     <div class="control-group">
                                         <div class="form-group floating-label-form-group">
                                             <label>Contenido del texto</label>
-                                            <textarea class="form-control border-bottom"  name="texto" type="text" placeholder="Ingrese el contenido del texto" required name="" id="" cols="30" rows="7"></textarea>
+                                            <textarea class="form-control border-bottom titulo_texto"  name="texto" type="text" placeholder="Ingrese el contenido del texto" required name="" id="" cols="30" rows="7"></textarea>
+                                            <p class="text-danger" id="requerido_texto"></p>
+                                        
                                         </div>
                                     </div>
+                                    <div class="control-group">
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <label>enlace</label>
+                                            <input class="form-control _texto enlace" type="url" name="enlace" id="" placeholder="Ingrese si tiene algun Enlace"/>
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <label>Titulo del enlace</label>
+                                            <input class="form-control" id="name" type="text" name="nombre_enlace" placeholder="Titulo del enlace"/>
+                                            <p class="help-block text-danger"></p>
+                                            <p class="text-danger" id="requerido_titulo_enlace"></p>
+                                        </div>
+                                    </div> 
+                                    <div class="control-group">
+                                        <label for="exampleFormControlFile1">Adjunte alguna imagen ilustrativa</label>
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <input type="file" class="form-control-file" name="foto" id="exampleFormControlFile1">
+                                            <p class="help-block text-danger"></p>
+                                        </div>
+                                    </div>                                    
                                     <br>                              
                                     <div class="form-group"><button class="btn btn-primary btn-xl" type="submit">Guardar</button></div>
                                 </form>
@@ -88,7 +112,7 @@
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
             </button>
             <div class="modal-body text-center">
-                <form id="contactForm" method="POST" action="{{route('editar_texto')}}">
+                <form id="contactForm" method="POST" action="{{route('editar_texto')}}" enctype="multipart/form-data">
                     @csrf
                     <div class="container">
                         <div class="row justify-content-center">
@@ -99,24 +123,38 @@
                                     <div class="divider-custom-line"></div>
                                     <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                     <div class="divider-custom-line"></div>
-                                </div>
+                                </div>   
+                                
+                                <!-- foto -->
+                                <div id="foto_texto_editar" class="mx-auto"></div> 
+
                                 <!-- Texto -->
                                 <div>                                    
                                     <p id="texto" class="lead"> </p>
                                 </div>
+
+                                <!-- añadir foto -->
+                                <div>                                    
+                                    <p id="anadir_foto" class="lead"> </p>
+                                </div>
+
                                 <!-- Prguntas-->
                                 <section class="d-flex flex-column">
                                     <div id="preguntas"  class="row">                                       
                                     </div>
                                     <div id="anadir_pregunta" class="row">
                                     </div>                                                                  
-                                </section>                            
+                                </section>
+
+                                <!-- enlace -->
+                                <div id="enlace_texto" class="text-left"></div>                           
+                                <div id="anadir_enlace_texto" class="text-left"></div>                           
                                 <br><br> 
                                 <div class="row">
-                                    <button type="submit" class="btn btn-primary mx-3">                                
+                                    <button type="submit" class="btn btn-primary mx-3" id="button_editar">                                
                                         Editar 
                                     </button>
-                                    <a  onclick="anadir_pregunta()" class="btn btn-primary">                                
+                                    <a  onclick="anadir_pregunta()" class="btn btn-primary button_anadir">                                
                                         Añadir preguntas 
                                     </a>                                    
                                 </div>                                                   
@@ -186,8 +224,8 @@
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                             <select style="border-radius: 10px; height: 50px; font-size: 20px;" id="pregunta_seleccionada" class="browser-default custom-select mb-4" name="pregunta"  required>
                                                 <option value="" selected disabled>Seleccione su pregunta</option>                                                                   
-                                                @foreach ($preguntas as $pregunta)
-                                                    <option value="{{$pregunta->id_pregunta}}" >{{$pregunta->pregunta}}</option> 
+                                                @foreach ($preguntas as $preguntaa)
+                                                    <option value="{{$preguntaa->id_pregunta}}" >{{$preguntaa->pregunta}}</option> 
                                                 @endforeach                                                                                         
                                             </select>
                                         </div>
@@ -213,39 +251,6 @@
     </div>
 </div>
 
-<!-- Modal para ver los registros de encuesta-->
-<div class="portfolio-modal modal fade" id="modal_registro" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="fas fa-times"></i></span>
-            </button>
-            <div class="modal-body text-center">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <h4 class="portfolio-modal-title text-secondary text-uppercase mb-0">Historial de encuesta</h4>
-                            <!-- Icon Divider-->
-                            <div class="divider-custom">
-                                <div class="divider-custom-line"></div>
-                                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                <div class="divider-custom-line"></div>
-                            </div>
-                            <div>
-                                <h4 id="nombre_usuario"></h4>
-                            </div>                               
-                            <div>                                    
-                                <div class="d-flex flex-column" id="titulo_encuesta">
-
-                                </div>
-                            </div>                                                                       
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Modal para editar un usuario-->
 <div class="portfolio-modal modal fade" id="editar_usuario" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
