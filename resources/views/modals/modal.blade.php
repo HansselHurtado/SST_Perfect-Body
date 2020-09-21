@@ -96,7 +96,7 @@
                             <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                             <div class="divider-custom-line"></div>
                         </div>
-                        <div class="row justify-content-center">
+                        <div id="modal_encuesta" class="row justify-content-center hiden">
                             
                             <div class="col-lg-10">
                                 <!-- Portfolio Modal - Title-->
@@ -111,10 +111,13 @@
                                     <!-- Prguntas-->
                                     <section  id="preguntas" class="d-flex flex-column ">                                                       
                                     </section>
-                                    <div id="enlace" class="text-left w-80">
+                                    <div id="enlace" class="text-left margin w-80">
                                     </div>                                     
                                 </div>                                                         
-                                <br><br>                 
+                                <br><br> 
+                                <div class="mx-auto my-3 mt-3">
+                                    <h4 class="">¡Muchas gracias por su tiempo! </h4>
+                                </div>                
                                 <button type="submit" class="btn btn-primary" id="enviar_encuesta">                                
                                     Enviar Encuesta
                                 </button>

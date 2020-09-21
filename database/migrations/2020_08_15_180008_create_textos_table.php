@@ -15,8 +15,9 @@ class CreateTextosTable extends Migration
     {
         Schema::create('textos', function (Blueprint $table) {
             $table->increments('id_texto');
-            $table->string('titulo');
+            $table->longText('titulo');
             $table->string('foto')->nullable();
+            $table->string('estado')->nullable();
             $table->string('nombre_enlace')->nullable();
             $table->longText('enlace')->nullable();
             $table->longText('texto')->nullable();

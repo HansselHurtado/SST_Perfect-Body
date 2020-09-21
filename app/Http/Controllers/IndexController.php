@@ -20,13 +20,13 @@ class IndexController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only('index_administracion','crear_texto','editar_texto','eliminar_texto','eliminar_pregunta','guardar_pdf');
+        $this->middleware('auth')->only('index_administracion','crear_texto','editar_texto','eliminar_texto','eliminar_pregunta','guardar_pdf','eliminar_personal');
     }
 
     public function index(){
         $departamentos = departamento::all();
         $personals = Personal::orderBy('nombre')->get();
-        $textos = Texto::all(); 
+        $textos = Texto::where('estado',1)->get(); 
         return view('home2',compact('departamentos','textos','personals'));
     }
 
@@ -34,6 +34,7 @@ class IndexController extends Controller
         $date = Carbon::now();
         $date = $date->format('Y-m-d'); 
         $textos = Texto::all(); 
+
         $departamentos = departamento::all();
         $preguntas = Pregunta::where('opciones',1)->orderBy('id_pregunta','desc')->get();
         $registros= Registro::join('personals','registros.id_personal','personals.id_personal')
@@ -74,6 +75,14 @@ class IndexController extends Controller
                                     ,'departamentos.departamento as nombre_departamento')                                           
                                     ->where('id_texto',$id_texto)->where('fecha',$date)->orderBy('personals.nombre')->get();
     }
+    public function texto_personal_solo_texto($id_texto){
+        return Registro::join('personals','registros.id_personal','personals.id_personal')
+                            ->join('departamentos','personals.id_departamento','departamentos.id_departamento')                                    
+                            ->select('registros.id_registro','registros.id_personal','registros.id_texto','registros.fecha',
+                                    'personals.nombre as nombre','personals.cedula as cedula'
+                                    ,'departamentos.departamento as nombre_departamento')                                           
+                                    ->where('id_texto',$id_texto)->orderBy('personals.nombre')->get();
+    }
     public function texto_personal_solo_fecha($date){
         return Registro::join('personals','registros.id_personal','personals.id_personal')
                             ->join('departamentos','personals.id_departamento','departamentos.id_departamento')                                    
@@ -91,11 +100,13 @@ class IndexController extends Controller
     }
     
     public function editar_textos($id_texto){
-        /*return Texto::with(array('pregunta'))
-                    ->where('id_texto',$id_texto)->get(); */
         return Texto::with(array('pregunta' => function($q){
             $q->join('respuestas','preguntas.id_pregunta','respuestas.id_pregunta');
         }))->where('id_texto',$id_texto)->get();
+    }
+
+    public function texto_con_preguntas($id_texto){
+        return Pregunta::where('id_texto',$id_texto)->where('opciones', 1)->get();
     }
     
     public function preguntas_respuestas($date, $id_personal){        
@@ -144,24 +155,30 @@ class IndexController extends Controller
             $departamento->save();
             return redirect()->back();
         }
-        return "el departamento ya existe";
         alert()->error('Ya existe un departamento','Este departamento ya existe');
         return redirect()->back();
     }
 
     public function crear_texto(Request $request){
-        $texto = new Texto;
-        $texto->titulo = $request->titulo;
-        $texto->texto = $request->texto;
-        $texto->enlace = $request->enlace;
-        $texto->nombre_enlace = $request->nombre_enlace;
-        if($request->hasFile("foto")){  
-            $file = $request->file("foto");               
-            $name = time().$file->getClientOriginalName();
-            $texto->foto = $name;
-            $file->move(public_path().'/images/foto_infografias/', $name);                
-        } 
-        $texto->save();
+        if(!$this->validar_texto($request->titulo)){
+            $texto = new Texto;
+            $texto->titulo = $request->titulo;
+            $texto->texto = $request->texto;
+            $texto->enlace = $request->enlace;
+            $texto->estado = $request->mostrar_texto;
+            $texto->nombre_enlace = $request->nombre_enlace;
+            if($request->hasFile("foto")){  
+                $file = $request->file("foto");               
+                $name = time().$file->getClientOriginalName();
+                $texto->foto = $name;
+                $file->move(public_path().'/images/foto_infografias/', $name);                
+            } 
+            $texto->save();
+        }else{
+            alert()->error('Ya existe un texto con este titulo','Este titulo ya existe');
+            return redirect()->back();  
+        }  
+        alert()->success('Todo ha salido bien','Texto creado correctamente');
         return redirect()->back();  
     }
 
@@ -171,6 +188,7 @@ class IndexController extends Controller
         $texto->enlace = $request->enlace;
         $texto->nombre_enlace = $request->nombre_enlace;
         $texto->texto = $request->texto;
+        $texto->estado = $request->mostrar_texto_editar;
         if($request->hasFile("foto")){  
             $file = $request->file("foto");               
             $name = time().$file->getClientOriginalName();
@@ -185,16 +203,20 @@ class IndexController extends Controller
                 $pregunta->id_texto = $request->id_texto;
                 $pregunta->save();          
             }else{
-                $pregunta_nueva = new Pregunta();
-                $pregunta_nueva->pregunta = $request->input("pregunta$i");
-                $pregunta_nueva->id_texto = $request->id_texto; 
-                $pregunta_nueva->opciones = $request->input("opciones$i");              
-                $pregunta_nueva->save();
-                $respuesta = new Respuesta();
-                $respuesta->opciones = $request->input("opciones$i");
-                $respuesta->id_pregunta = $pregunta_nueva->id_pregunta;
-                $respuesta->save();
-            }
+                if(!$this->validar_pregunta($request->input("pregunta$i"),$request->id_texto)){
+                    $pregunta_nueva = new Pregunta();
+                    $pregunta_nueva->pregunta = $request->input("pregunta$i");
+                    $pregunta_nueva->id_texto = $request->id_texto; 
+                    $pregunta_nueva->opciones = $request->input("opciones$i");              
+                    $pregunta_nueva->save();
+                    $respuesta = new Respuesta();
+                    $respuesta->opciones = $request->input("opciones$i");
+                    $respuesta->id_pregunta = $pregunta_nueva->id_pregunta;
+                    $respuesta->save();
+                }else{
+                    alert()->error('Las preguntas iguales no se guardan','Hubieron preguntas iguales');
+                }  
+            }          
         }
         return redirect()->back();  
     }
@@ -205,6 +227,7 @@ class IndexController extends Controller
         $personal->cedula = $request->cedula;
         $personal->id_departamento = $request->departamento;
         $personal->save();
+        alert()->success('Todo ha salido bien','Edicion exitosa');
         return redirect()->back(); 
     }
 
@@ -218,20 +241,31 @@ class IndexController extends Controller
     public function eliminar_texto($id_texto){
         $texto = Texto::findOrFail($id_texto);
         $texto->delete();
+        alert()->success('Texto eliminado correctamente','Se ha eliminado el texto');
         return redirect()->back(); 
     }
 
     public function eliminar_personal($id_personal){
         $personal = Personal::findOrFail($id_personal);
         $personal->delete();
+        alert()->success('Usuario eliminado correctamente','Se ha eliminado un usuario');
         return redirect()->back(); 
     }
 
     public function eliminar_pregunta($id_pregunta){
         $pregunta = Pregunta::findOrFail($id_pregunta);
         $pregunta->delete();
+        alert()->success('Pregunta eliminada correctamente','Se ha eliminado una pregunta');
         return redirect()->back();
     }
+
+    public function eliminar_respuesta($id_respuesta){
+        $respuesta = Respuesta::findOrFail($id_respuesta);
+        $respuesta->delete();
+        alert()->success('Respuesta eliminada correctamente','Se ha eliminado una opción de respuesta');
+        return redirect()->back();
+    }
+
 
     public function anadir_respuesta(Request $request){
         $j=1;
@@ -251,6 +285,28 @@ class IndexController extends Controller
         return redirect()->back(); 
     }
 
+    
+    public function guardar_pdfs($id_texto){
+        /*setlocale(LC_TIME, 'Spanish');
+        $date=Carbon::now();
+        $date->format('d-m-Y');
+        $date=$date->formatLocalized('%d de %B de %Y');*/
+
+
+        $datee = Carbon::now()->locale('es');
+        $dat = $datee->isoFormat('dddd LL');
+        $date = $datee->format('Y-m-d'); 
+        $texto = Texto::where('id_texto',$id_texto)->first();
+        $registros = Registro::join('personals','registros.id_personal','personals.id_personal')
+                            ->join('departamentos','personals.id_departamento','departamentos.id_departamento')                                    
+                            ->select('registros.id_registro','registros.id_personal','registros.id_texto','registros.fecha',
+                                    'personals.nombre as nombre','personals.cedula as cedula'
+                                    ,'departamentos.departamento as nombre_departamento')                                           
+                            ->where('id_texto',$id_texto)->orderBy('personals.nombre')->get(); 
+        $pdf = PDF::loadView('registro_ecnuesta',compact('registros','texto','dat'));
+        return $pdf->stream("historial encuesta de {$texto->titulo} {$date}.pdf");
+    }
+
     public function validar_departamento($nombre_departamento){
         $departamentos = departamento::all();
         foreach ($departamentos as $departamento){
@@ -260,15 +316,27 @@ class IndexController extends Controller
         }
         return false;
     }
-
-    public function guardar_pdf($date, $id_personal, $nombre){
-        $nombre = $nombre;
-        $date = $date;
-        $registros =  Registro::with('registro_pregunta_respuesta')
-                            ->join('textos','registros.id_texto','textos.id_texto')
-                            ->where('id_personal',$id_personal)->where('fecha',$date)->get();
-       // return view('modals/historial_encuesta_pdf',compact('registros'));
-        $pdf = PDF::loadView('modals/historial_encuesta_pdf',compact('registros','nombre','date'));
-        return $pdf->download('historial.pdf');
+    
+    public function validar_pregunta($nombre_pregunta,$id_texto){
+        $preguntas = Pregunta::where('id_texto',$id_texto)->get();
+        foreach ($preguntas as $pregunta){
+            if($pregunta->pregunta == $nombre_pregunta){
+                return true;
+            }
+        }
+        return false;
     }
+
+    public function validar_texto($titulo){
+        $textos = Texto::all();
+        foreach ($textos as $texto){
+            if($texto->titulo == $titulo){
+                return true;
+            }
+        }
+        return false;
+    }
+   
 }
+
+

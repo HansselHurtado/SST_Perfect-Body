@@ -53,12 +53,12 @@
                         <div class="row">
                             <div class="col-lg-8 mx-auto">
                                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                                <form id="contactForm" method="POST" action="{{route('crear_texto')}}" enctype="multipart/form-data">
+                                <form id="" method="POST" action="{{route('crear_texto')}}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="control-group">
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                             <label>Titulo del texto</label>
-                                            <input class="form-control titulo_texto" id="name" type="text" name="titulo" placeholder="Ingrese titulo de texto" required />
+                                            <input class="form-control titulo_texto"  type="text" name="titulo" placeholder="Ingrese titulo de texto" required />
                                             <p class="help-block text-danger"></p>
                                             <p class="text-danger" id="requerido_titulo"></p>
 
@@ -75,12 +75,12 @@
                                     <div class="control-group">
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                             <label>enlace</label>
-                                            <input class="form-control _texto enlace" type="url" name="enlace" id="" placeholder="Ingrese si tiene algun Enlace"/>
+                                            <input class="form-control _texto enlace" type="url" name="enlace"  placeholder="Ingrese si tiene algun Enlace"/>
                                             <p class="help-block text-danger"></p>
                                         </div>
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                             <label>Titulo del enlace</label>
-                                            <input class="form-control" id="name" type="text" name="nombre_enlace" placeholder="Titulo del enlace"/>
+                                            <input class="form-control"  type="text" name="nombre_enlace" placeholder="Titulo del enlace"/>
                                             <p class="help-block text-danger"></p>
                                             <p class="text-danger" id="requerido_titulo_enlace"></p>
                                         </div>
@@ -91,7 +91,15 @@
                                             <input type="file" class="form-control-file" name="foto" id="exampleFormControlFile1">
                                             <p class="help-block text-danger"></p>
                                         </div>
-                                    </div>                                    
+                                    </div> 
+                                    <div class="control-group my-3">
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <select style="border-radius: 10px; height: 50px; font-size: 20px;"  class="browser-default custom-select mb-4" name="mostrar_texto"  required>
+                                                <option value="1" selected >Habilitar</option> 
+                                                <option value="0" >Deshabilitar</option> 
+                                            </select>
+                                        </div>
+                                    </div>                                   
                                     <br>                              
                                     <div class="form-group"><button class="btn btn-primary btn-xl" type="submit">Guardar</button></div>
                                 </form>
@@ -112,7 +120,7 @@
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
             </button>
             <div class="modal-body text-center">
-                <form id="contactForm" method="POST" action="{{route('editar_texto')}}" enctype="multipart/form-data">
+                <form  method="POST" action="{{route('editar_texto')}}" enctype="multipart/form-data">
                     @csrf
                     <div class="container">
                         <div class="row justify-content-center">
@@ -148,7 +156,19 @@
 
                                 <!-- enlace -->
                                 <div id="enlace_texto" class="text-left"></div>                           
-                                <div id="anadir_enlace_texto" class="text-left"></div>                           
+                                <div id="anadir_enlace_texto" class="text-left"></div>
+                                <div class="text-left">
+                                    <span >Estado actual: <strong id="mostrar"></strong></span>
+                                </div>   
+                                <div class="control-group my-3">
+                                    <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                        <select style="border-radius: 10px; height: 50px; font-size: 20px;"  class="browser-default custom-select mb-4" name="mostrar_texto_editar"  required>
+                                            <option value="" selected disabled>Seleccione si se mostrará el texto</option>                                       
+                                            <option value="1">Habilitar</option> 
+                                            <option value="0" >Deshabilitar</option> 
+                                        </select>
+                                    </div>
+                                </div>
                                 <br><br> 
                                 <div class="row">
                                     <button type="submit" class="btn btn-primary mx-3" id="button_editar">                                
@@ -222,11 +242,18 @@
                                     @csrf
                                     <div class="control-group">
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                                            <select style="border-radius: 10px; height: 50px; font-size: 20px;" id="pregunta_seleccionada" class="browser-default custom-select mb-4" name="pregunta"  required>
-                                                <option value="" selected disabled>Seleccione su pregunta</option>                                                                   
-                                                @foreach ($preguntas as $preguntaa)
-                                                    <option value="{{$preguntaa->id_pregunta}}" >{{$preguntaa->pregunta}}</option> 
+                                            <select style="border-radius: 10px; height: 50px; font-size: 20px;" id="texto_seleccionado" class="browser-default custom-select mb-4" name="pregunta"  required>
+                                                <option value="" selected disabled>Seleccione un titulo de texto</option>                                                                   
+                                                @foreach ($textos as $texto)
+                                                    <option value="{{$texto->id_texto}}" >{{$texto->titulo}}</option> 
                                                 @endforeach                                                                                         
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                            <select style="border-radius: 10px; height: 50px; font-size: 20px;" id="pregunta_seleccionada" class="browser-default custom-select mb-4" name="pregunta"  required>
+                                                <option value="" selected disabled>Primero escoja un titulo de texto</option>                                                                               
                                             </select>
                                         </div>
                                     </div>
@@ -238,6 +265,7 @@
                                         <a class="btn btn-primary btn-lg" onclick="anadir_respuesta();" >Añadir Respuesta</a>    
                                 </form>                                
                                         <form id="form_preguntas" method="POST" action="">
+                                            @method('GET')
                                             @csrf        	
                                             <button class="btn btn-danger btn-lg" type="submit" id="eliminar_pregunta" onclick="eliminar_preguntaa();" disabled>Eliminar pregunta</button>
                                         </form> 
@@ -260,19 +288,17 @@
                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
             </button>
             <div class="modal-body text-center">
-                <form id="contactForm" method="POST" action="{{route('editar_personal')}}">
+                <form id="" method="POST" action="{{route('editar_personal')}}">
                     @csrf
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
                                 <h4 class="portfolio-modal-title text-secondary text-uppercase " id="personal"></h4>                                                            
-                                <select style="border-radius: 10px; height: 50px; font-size: 20px;"  class="browser-default custom-select mb-4" name="departamento"  required>
-                                                                        
+                                <select style="border-radius: 10px; height: 50px; font-size: 20px;"  class="browser-default custom-select mb-4" id="select_departamento" name="departamento"  required>
                                     <option id="departamentos_personal" selected></option>                                                                   
                                     <@foreach ($departamentos as $departamento)
-                                         <option value="{{$departamento->id_departamento}}" >{{$departamento->departamento}}</option> 
+                                        <option value="{{$departamento->id_departamento}}" >{{$departamento->departamento}}</option> 
                                     @endforeach                                  
-                                                                                                                                                  
                                 </select>                                                           
                                 <br><br> 
                                 <div class="row">
@@ -317,7 +343,7 @@
                                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                             <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                                 <label>Nombre del departamento</label>
-                                                <input class="form-control" id="name" type="text" name="departamento" placeholder="Ingrese el nombre del departamento" required />
+                                                <input class="form-control" type="text" name="departamento" placeholder="Ingrese el nombre del departamento" required />
                                             </div> 
                                         </div>
                                     </div>

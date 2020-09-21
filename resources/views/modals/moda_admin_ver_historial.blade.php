@@ -24,12 +24,7 @@
 
                                 </div>
                             </div>
-                            <div class="text-center mt-4" >
-                                <a class="btn btn-xl btn-outline-success"  id="descargar_encuesta">
-                                    <i class="fas fa-download mr-2"></i>
-                                    Descargar PDF!
-                                </a>
-                            </div>                                                                      
+                                                                                                 
                         </div>
                     </div>
                 </div>

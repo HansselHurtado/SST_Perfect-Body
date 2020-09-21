@@ -16,7 +16,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
 
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.8.0/sweetalert2.min.css" rel="stylesheet" />
+        <link href="{!! asset('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.8.0/sweetalert2.min.css') !!}" rel="stylesheet" />
 
     </head>
     <body id="page-top">
@@ -75,7 +75,7 @@
                     <div class="divider-custom-line"></div>
                 </div>
                 <!-- Masthead Subheading-->
-                <p class="masthead-subheading font-weight-light mb-0">Clinica Perfect Body Medical Center</p>
+                <p class="masthead-subheading font-weight-light mb-0">Perfect Body Medical Center L.T.D.A</p>
             </div>
         </header>
         <!-- Portfolio Section-->
@@ -92,7 +92,7 @@
                     <!-- Portfolio Item 1-->
                     @foreach ($textos as $texto)
                         <div class="col-md-6 col-lg-3 mb-5">
-                        <h5 class="single-line">{{$texto->titulo}}</h5> 
+                        <h5 class="single-line text-center">{{$texto->titulo}}</h5> 
                         <div class="portfolio-item mx-auto d-block" data-toggle="modal" data-target="#editar_texto" onclick="editar_texto('{{$texto->id_texto}}')">                                                   
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                     <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-check fa-3x"></i></div>
@@ -102,7 +102,12 @@
                             </div>                                    
                             <a data-toggle="modal" title="Eliminar texto" data-target="#eliminar_texto" onclick="Eliminar_texto('{{$texto->id_texto}}','{{$texto->titulo}}')" class="close" type="button"  aria-label="Close">
                                 <span aria-hidden="true"><i class="fas fa-times"></i></span>
-                            </a>                            
+                            </a>
+                            @if ($texto->estado == 0)
+                                <div class="text-left">
+                                    <img style="width: 30px; height: 30px;" class="img-fluid mx-auto d-block " src="assets/img/bloquear.svg" alt="" />
+                                </div>   
+                            @endif                                                     
                         </div>                        
                     @endforeach                 
                 </div>
@@ -123,26 +128,30 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     <div class="ml-25 py-3 w-respuestas">
-                        <select style="border-radius: 10px; height: 50px; font-size: 20px;" id="pregunta_seleccionada_personal" class="browser-default custom-select mb-4" name=""  required>
+                        <select style="border-radius: 10px; height: 50px; font-size: 20px; width: 80%;" id="pregunta_seleccionada_personal" class="browser-default custom-select mb-4" name=""  required>
                             <option value="" selected >Ningun titulo Seleccionado</option>                                                                   
                             @foreach ($textos as $texto)
                                 <option value="{{$texto->id_texto}}" >{{$texto->titulo}}</option> 
                             @endforeach                                                                                         
                         </select>
+                        <div class="mx-3">
+                            <strong id="error_busqueda_texto" class="text-center text-danger animacion"></strong>
+                        </div>
                     </div>
                     <div class="w-60  row justify-content-end my-4">
                         <div class="">
                             <label class="" for=""> Buscar por fecha</label>
                         </div>
                         <div class="mx-3 d-flex flex-column">
-                            <input name="fecha" class="form-control form-control-user mx-3" type="date" id="fecha_personal" required>
-                            <div class="mx-3">
-                                <strong id="error_busqueda" class="text-center text-danger animacion"></strong>
-                            </div>
+                            <input name="fecha" class="form-control form-control-user mx-3" type="date" id="fecha_personal">                            
                         </div>
                         
-                        <div class=" mx-5">
-                            <a class="btn btn-dark" id="buscar_personal">buscar</a>
+                        <div class="">
+                            <a class="btn btn-dark mx-2" id="buscar_personal">buscar</a>
+                            <a class="btn btn-success mx-2" id="restaurar">Reset fecha</a>  
+                        </div>
+                        <div class="mx-3">
+                            <strong id="error_busqueda" class="text-center text-danger animacion"></strong>
                         </div>
                     </div>            
                 </div>
@@ -152,6 +161,7 @@
                 <table class="table table-bordered"  width="100%" cellspacing="0">
                     <thead>
                         <tr style="text-align: center;" class="text-light">
+                            <th>#</th>                                    
                             <th>Nombre completo</th>                                    
                             <th>Cedula</th>
                             <th>Departamento</th>                         
@@ -159,18 +169,27 @@
                     </thead>
                     <tbody id="table_personal">
                         @php($i="")         
+                        @php($j=1)         
                         @foreach ($registros as $registro )
                             @if($registro->nombre != $i)
                                 <tr style="text-align: center;">
+                                    <th>{{$j}}</th>
                                     <th><a class="btn btn-outline-light" onclick="ver_registro_encuesta('{{$registro->nombre}}','{{$registro->fecha}}','{{$registro->id_personal}}')" data-toggle="modal" data-target="#modal_registro" href="">{{$registro->nombre}}</a></th>
                                     <th>{{$registro->cedula}}</th>
                                     <th>{{$registro->nombre_departamento}}</th>                                    
                                 </tr> 
+                                @php($j++)
                                 @php($i = $registro->nombre) 
                             @endif                                             
                         @endforeach   
                     </tbody>
-                </table>                  
+                </table> 
+                <div class="text-center mt-4 ver hiden " >
+                    <a class="btn btn-xl btn-outline-success text-white" TARGET="_BLANK" id="descargar_encuesta">
+                        <i class="fas fa-download mr-2"></i>
+                        Descargar PDF!
+                    </a>
+                </div>                   
             </div>
         </section>
 
@@ -225,44 +244,8 @@
         </section>        
         
         <!-- Footer-->
-        <footer class="footer text-center">
-            <div class="container">
-                <div class="row">
-                    <!-- Footer Location-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">Ubicacion</h4>
-                        <p class="lead mb-0">
-                            CRA .20 No 15-110 Barrio Jardin
-                            <br />
-                            Santa Marta--Magdalena
-                        </p>
-                    </div>
-                    <!-- Footer Social Icons-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">Sitios Web</h4>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
-                    </div>
-                    <!-- Footer About Text-->
-                    <div class="col-lg-4">
-                        <h4 class="text-uppercase mb-4">Sobre esta Aplicacion web</h4>
-                        <p class="lead mb-0">
-                           Aplicacion Realizada por perfect body Tecnologia, Desarrollada por Hanssel Hurtado Buendia
-                           <a href="#">Ingeniero de sistemas,</a>                            
-                           <a href="#">Desarrollador web</a>                            
-                           <a href="#">3006408288</a>                            
-                           <a href="#">Hansselhurtado@gmail.com</a>                           
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- Copyright Section-->
-        <div class="copyright py-4 text-center text-white">
-            <div class="container"><small>Copyright © Perfect Body 2020 © Tecnología e investigación</small></div>
-        </div>
+        @include('footer')
+        
         <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
         <div class="scroll-to-top d-lg-none position-fixed">
             <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a>
@@ -278,12 +261,12 @@
         <script src="assets/mail/contact_me.js"></script>-->
 
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.8.0/sweetalert2.min.js"></script>
-        
+        <script src="{!! asset('https://unpkg.com/sweetalert/dist/sweetalert.min.js') !!}"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
         <script src="js/texto.js"></script>
         @include('modals/modal_administracion')        
-        @include('modals/moda_admin_ver_historial')        
+        @include('modals/moda_admin_ver_historial')   
+        @include('sweet::alert')              
     </body>
 </html>

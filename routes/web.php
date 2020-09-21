@@ -18,9 +18,6 @@ Auth::routes();
 
 //registrar nuevo usario
 Route::post('/home/registro','HomeController@registroNuevo')->name('registrar');
-
-//Route::post('/administracion', 'LoginController@login')->name('iniciar'); 
-
 Route::post('/home/registrar-personal','IndexController@registrar_personal')->name('registrar_personal');
 Route::post('/home/guardar-encuenta','IndexController@guardar_encuesta')->name('guardar_encuenta');
 
@@ -30,11 +27,12 @@ Route::post('/administracion/crear-texto','IndexController@crear_texto')->name('
 Route::post('/administracion/editar-texto','IndexController@editar_texto')->name('editar_texto');
 Route::delete('/administracion/eliminar-texto/{id_texto}','IndexController@eliminar_texto');
 Route::post('/administracion/anadir-respuesta','IndexController@anadir_respuesta')->name('anadir_respuesta');
-Route::post('/administracion/eliminar-pregunta/{id_pregunta}','IndexController@eliminar_pregunta');
+Route::get('/administracion/eliminar-pregunta/{id_pregunta}','IndexController@eliminar_pregunta');
+Route::get('/administracion/eliminar-respuesta/{id_respuesta}','IndexController@eliminar_respuesta');
 Route::delete('/administracion/eliminar-personal/{id_personal}','IndexController@eliminar_personal');
 Route::post('/administracion/editar-personal','IndexController@editar_personal')->name('editar_personal');
 Route::post('/administracion/crear-departamento','IndexController@crear_departamento')->name('crear_departamento');
-Route::get('/administracion/guardar_pdf/{fecha}/{id_personal}/{nombre}','IndexController@guardar_pdf')->name('guardar_pdf');
+Route::get('/administracion/guardar_pdfs/{id_texto}','IndexController@guardar_pdfs')->name('guardar_pdfs');
 
 
 
