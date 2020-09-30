@@ -72,24 +72,23 @@
                     @csrf
                     <div class="container">
                         <br>
-                        <div class="alert alert-success alert-dismissable">
-                            <button type="button" class="close cerrar" data-dismiss="alert">&times;</button>
+                        <div class="alert alert-success alert-dismissable mensaje">
+                            <button type="button" class="close cerrar button_close" data-dismiss="alert">&times;</button>
                             <strong>¡Recuerde!</strong> para poder hacer la encuesta debe estár registrado, si ya lo hizo haga caso omiso. Gracias.
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div  class="my-3">
-                                <input required class="form-control" style=" font-size: 20px;  height: 50px; width: 300px; border-radius: 10px;" name="cedula" id="cedula" type="number" placeholder="Ingrese su numero de cedula">                     
+                            <div  class="my-3 ">
+                                <input required class="form-control regis" style=" font-size: 20px;  height: 50px; width: 300px; border-radius: 10px;" name="cedula" id="cedula" type="number" placeholder="Ingrese su numero de cedula">                     
                             </div> 
                             <div class=" mx-2 my-4">
                                 <a class="btn btn-primary" id="anadir_personal"> Añadir</a>
                             </div>
                             <div class="mx-2">
                                 <p class="help-block text-danger"></p>
-                                <input required readonly  class="form-control" style=" font-size: 20px;  height: 50px; width: 300px; border-radius: 10px;" name="nombre_personal" id="nombre_personal" type="text" placeholder="Añadir para traer su nombre">                                                          
+                                <input required readonly  class="form-control regis" style=" font-size: 20px;  height: 50px; width: 300px; border-radius: 10px;" name="nombre_personal" id="nombre_personal" type="text" placeholder="Añadir para traer su nombre">                                                          
                                 <input required class="form-control" style=" display: none" name="id_personal" id="id_personal" type="text">
                                 <strong><p class="text-danger" id="error"> </p> </strong>                                                     
-                            </div>
-                            
+                            </div>                            
                         </div>
                         <div class="divider-custom">
                             <div class="divider-custom-line"></div>

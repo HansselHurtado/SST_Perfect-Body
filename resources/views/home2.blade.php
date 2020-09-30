@@ -6,6 +6,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>SST Perfect Body</title>
+        
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" class="p-5" href="assets/img/logo.png"/>
         <!-- Font Awesome icons (free version)-->

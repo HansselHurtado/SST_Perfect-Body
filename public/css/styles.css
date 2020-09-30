@@ -652,11 +652,13 @@ pre code {
   .container {
     max-width: 540px;
   }
+  
 }
 @media (min-width: 768px) {
   .container {
     max-width: 720px;
   }
+  
 }
 @media (min-width: 992px) {
   .container {
@@ -2058,6 +2060,16 @@ pre code {
   }
   .table-responsive-md > .table-bordered {
     border: 0;
+  }
+  .regis {
+    width: 150px !important;
+    font-size: 5px;
+  }
+  .mensaje {
+    font-size: 10px;
+  }
+  .button_close{
+    width: 10px;
   }
 }
 @media (max-width: 991.98px) {
